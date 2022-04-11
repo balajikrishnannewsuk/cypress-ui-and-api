@@ -44,7 +44,7 @@ jobs:
   cypress-tests:
     machine:
       image: ubuntu-2004:202010-01
-    resource_class: nukengprod/pubsys-circleci-runner-dev
+    resource_class: xlarge
     parallelism: 3
     steps:
       - checkout
