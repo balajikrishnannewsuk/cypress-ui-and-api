@@ -43,7 +43,7 @@ const logoutLnk="a[title='Logout']";
 Cypress.Commands.add("login", () => { 
    cy.visit('/');
    cy.fixture("userData").then((testData) => {
-   cy.wait(1000);
+   cy.wait(2000);
    cy.get(usernameTxtBox,{timeout: 2000}).first().type(testData.username);
    cy.get(passwordTxtBox).first().type(testData.password);
   });

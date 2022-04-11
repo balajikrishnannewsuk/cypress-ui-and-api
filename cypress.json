@@ -3,5 +3,7 @@
 "pageLoadTimeout":60000,
 "viewportWidth": 1440,
 "viewportHeight": 900,
-"baseUrl": "http://dew1lxmttdev02.dni.dev.internal:8443/swing/app/swing.html#dashboard"
+"baseUrl": "http://dew1lxmttdev02.dni.dev.internal:8443/swing/app/swing.html#dashboard",
+"ignoreTestFiles": ["*.js", "*.md"],
+"testFiles": "**/*.{feature,features}"
 }
