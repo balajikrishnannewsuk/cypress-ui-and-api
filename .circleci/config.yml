@@ -1,26 +1,79 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+orbs:
+  slack: circleci/slack@4.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+slack-fail-post-step: &slack-fail-post-step
+  context:
+    - swing-cypress-ui-api-slack
+  post-steps:
+    - slack/notify:
+        branch_pattern: .+
+        event: fail
+        template: basic_fail_1
+        channel: C039YF77KMY
+
+commands:
+  install_nodejs:
+    steps:
+      - run:
+          name: Install Node.js
+          command: |
+            curl -sSL "https://nodejs.org/dist/v10.21.0/node-v10.21.0-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v10.21.0-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo npm_install=6.14.11 sh
+  run_npm_command_with_cache:
+    steps:
+      - restore_cache:
+          name: Restore npm cache
+          keys:
+            - v1-deps-{{ checksum "package-lock.json" }}
+      - save_cache:
+          name: Save npm cache
+          key: v1-deps-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: circleci/php:7.4-browsers
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+      - install_nodejs 
+   
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  cypress-tests:
+    machine: true
+    resource_class: nukengprod/pubsys-circleci-runner-dev
+    parallelism: 3
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: npm install
+          command: |
+            npm ci
+      - run:  
+          name: Run Cypress tests 
+          command: |  
+            ./node_modules/cypress/bin/cypress run --spec "$( circleci tests glob cypress/integration/*.feature | circleci tests split --split-by=filesize | paste -sd "," -)" --reporter cypress-circleci-reporter 
+      - store_artifacts:
+          path: cypress/screenshots
+      - store_test_results:
+          path: test_results/cypress
+
+
+
 workflows:
-  say-hello-workflow:
+  version: 2
+  build_deploy:
     jobs:
-      - say-hello
+      - build:
+          <<: *slack-fail-post-step
+          filters:
+            branches:
+              ignore: /.*-built
+      - cypress-tests:
+          <<: *slack-fail-post-step
+          requires:
+            - build
