@@ -44,7 +44,7 @@ jobs:
   cypress-tests:
     machine: true
     resource_class: nukengprod/pubsys-circleci-runner-dev
-    parallelism: 3
+    # parallelism: 3
     steps:
       - checkout
       - attach_workspace:
