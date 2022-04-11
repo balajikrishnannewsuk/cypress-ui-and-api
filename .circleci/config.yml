@@ -42,9 +42,9 @@ jobs:
    
 
   cypress-tests:
-    machine:
-      image: ubuntu-2004:202010-01
-    resource_class: xlarge
+    runner:
+    machine: true
+    resource_class: your-namespace/your-resource
     parallelism: 3
     steps:
       - checkout
@@ -78,3 +78,4 @@ workflows:
           <<: *slack-fail-post-step
           requires:
             - build
+      
