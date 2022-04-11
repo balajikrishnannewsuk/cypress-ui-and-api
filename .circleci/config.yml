@@ -42,10 +42,9 @@ jobs:
    
 
   cypress-tests:
-    machine:
-      image: ubuntu-2004:202010-01
+    machine: true
+    resource_class: nukengprod/pubsys-circleci-runner-dev
     parallelism: 3
-    resource_class: xlarge
     steps:
       - checkout
       - attach_workspace:
