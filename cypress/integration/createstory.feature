@@ -4,4 +4,5 @@ Feature: swing application
   
   Scenario: Create new story
     Given I am logging to swing application
+    And   I create new story
     And   I am logging out from swing application

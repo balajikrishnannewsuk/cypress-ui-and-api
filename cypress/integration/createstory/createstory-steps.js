@@ -5,6 +5,10 @@ Given('I am logging to swing application', () => {
     cy.login();
 });
 
+And('I create new story', () => {
+    cy.createNewStory();
+});
+
 And('I am logging out from swing application', () => {
     cy.logout();
 });
