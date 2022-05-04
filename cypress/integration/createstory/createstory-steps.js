@@ -5,7 +5,7 @@ Given('I am logging to swing application', () => {
     cy.login();
 });
 
-And('I create new story', () => {
+And('I am creating new story', () => {
     cy.createNewStory();
 });
 

@@ -19,7 +19,8 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 import './index';
-import './windowcommands'
+import './windowcommands';
+import 'cypress-iframe';
 /// <reference types="cypress" />
 
 
@@ -34,7 +35,8 @@ const loginBtn="button[id='loginButton']";
 // ***********************************************
 // This is dashboard page elements
 const homePageProfileIcon="div[id='emui-user-name'] span[data-usermodel='username']";
-const profileName="ChiefSub Times";
+ const profileName="ChiefSub Times";
+// const profileName="Design Times";
 const logoutLnk="a[title='Logout']";
 // ***********************************************
 
@@ -53,12 +55,17 @@ const createButton="button[type='submit']";
 const headlineArea="div[eom-name='headline']";
 // ***********************************************
 
-
-
-
 // -- This is a command to login to swing application --
 Cypress.Commands.add("login", () => { 
    cy.visit(Cypress.config('baseUrl'));
+   cy.window().then(win => {
+    cy.stub(win, 'open').callsFake((url, target) => {
+      expect(target).to.be.undefined
+      // call the original `win.open` method
+      // but pass the `_self` argument
+      return win.open.wrappedMethod.call(win, url, '_self')
+    }).as('open')
+  })
    cy.fixture("userData").then((testData) => {
    cy.wait(2000);
    cy.get(usernameTxtBox).first().type(testData.username);
@@ -84,13 +91,18 @@ Cypress.Commands.add("createNewStory", () => {
   cy.get(channelOption).contains('None').click();
   cy.get(topicFromChkBox).click();
   cy.get(createButton).click();
-  cy.wait(10000);
-  cy.url().then(url => {
-    const getUrl = url
-    cy.log('Current URL is : '+getUrl)
-    cy.request(getUrl);
-    cy.reload();
-    cy.get("div[eom-name='headline']",{timeout: 50000}).should('be.visible');
+  cy.wait(20000);
+  cy.debug();
+  cy.get("div[eom-name='headline']",{timeout: 50000}).should('be.visible');
+  // cy.url().then(url => {
+  // const getUrl = url;
+  // cy.log('Current URL is : '+getUrl)
+  // const currentURL = getUrl.split('?')
+  // const newURL = currentURL[0]
+  // cy.forceVisit(newURL);
+  // })
+  // cy.visit(newURL);
+  // cy.get("div[eom-name='headline']",{timeout: 50000}).should('be.visible');
 })
   // cy.go('back');
   // cy.window().then((win) => {
@@ -120,8 +132,6 @@ Cypress.Commands.add("createNewStory", () => {
   //     // moving back to the parent tab with the help of go() method
   //     // cy.go('back');
   //   cy.wait(60000);
-    
-})
   // cy.get('a[title^='+testname+']').then(function ($a) {
   //   // extract the fully qualified href property
   //   const href = $a.prop('data-obj-id')
@@ -139,6 +149,10 @@ Cypress.Commands.add("createNewStory", () => {
   // cy.log(+testname+".xml - Méthode Swing - Editorial");
 
 
-
+  Cypress.Commands.add('forceVisit', url => {
+    cy.window().then(win => {
+        return win.open(url, '_self');
+    });
+});
 
 

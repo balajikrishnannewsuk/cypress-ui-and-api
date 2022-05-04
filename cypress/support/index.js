@@ -25,10 +25,10 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return false
   })
 
-  Cypress.Server.defaults({
-    delay: 500,
-    force404: false,
-    ignore: (xhr) => {
-      // handle custom logic for filtering XHR requests
-    },
-  })
+  // Cypress.Server.defaults({
+  //   delay: 500,
+  //   force404: false,
+  //   ignore: (xhr) => {
+  //     // handle custom logic for filtering XHR requests
+  //   },
+  // })
