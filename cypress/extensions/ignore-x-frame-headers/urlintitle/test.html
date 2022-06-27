@@ -1,0 +1,131 @@
+<!-- <head urlintitle="disabled"></head> -->
+
+<script>
+//document.head.setAttribute('urlintitle', 'disabled');
+
+var lastTitleMutationDate = new Date();
+var titleMutationStatus = '';
+var lastTitleSet = null;
+var mutationObserver = null;
+
+function initialize() {
+  onTitleChange();
+  window.setInterval(updateStatus, 1000);
+}
+
+function onTitleChange() {
+  var currentTitle = document.title;
+
+  lastTitleMutationDate = new Date();
+  titleMutationStatus = 'currentTitle: "' + currentTitle + '"';
+
+  updateStatus('onTitleChange');
+
+  if (mutationObserver) {
+    return;
+  }
+  var titleElem = document.querySelector('head > title');
+  if (!titleElem) {
+    return;
+  }
+  mutationObserver = new window.MutationObserver(
+    function(mutations) {
+      onTitleChange();
+    }
+  );
+  alert(titleElem);
+  mutationObserver.observe(
+      titleElem,
+      { subtree: true, characterData: true, childList: true });
+}
+
+function updateStatus(reason) {
+  if (reason) {
+    console.log('updateStatus - ' + reason);
+  }
+
+  var statusLines = [];
+
+  statusLines.push('document.title = ' + document.title);
+
+  var titleElem = document.getElementsByTagName('title')[0];
+  var titleText = titleElem ? titleElem.textContent : '';
+  statusLines.push('<title> = "' + titleText + '"');
+
+  statusLines.push('lastTitleMutationDate = ' + lastTitleMutationDate);
+  statusLines.push('titleMutationStatus = ' + titleMutationStatus);
+
+  var LOCATION_FIELDS = {
+    "protocol": "http",
+    "hostname": "www.example.com",
+    "port": 8080,
+    "pathname": "/sub/path",
+    "search": "?arg=value",
+    "hash": "#hash",
+  };
+  for (var field in LOCATION_FIELDS) {
+    statusLines.push('location.' + field + ' = ' + document.location[field]);
+  }
+
+  document.getElementById('status').textContent = statusLines.join('\n');
+}
+
+function deleteElement(selector) {
+  document.querySelector(selector).remove();
+}
+
+function setTitle(titleFunction) {
+  const newTitle = titleFunction(document.title);
+  document.getElementById('titleLog').textContent = 'setTitle: ' + newTitle;
+  document.title = newTitle;
+}
+
+function setState(title, url) {
+  window.history.pushState(title + '/' + url, title, url);
+}
+
+window.addEventListener('load', initialize);
+window.addEventListener('popstate', function() {
+  updateStatus('popstate');
+});
+</script>
+
+<h2>Delete element</h2>
+<p>
+  <button onclick="deleteElement('head > title')">Delete &lt;title&gt;</button>
+  <button onclick="deleteElement('head')">Delete &lt;head&gt;</button>
+</p>
+
+<h2>Set title</h2>
+<p>
+  <button onclick="setTitle(old => 'Title A')">Title A</button>
+  <button onclick="setTitle(old => 'Title B')">Title B</button>
+  <button onclick="setTitle(old => null)">null</button>
+  <button onclick="setTitle(old => '')">empty</button>
+</p>
+
+<p>
+  <button onclick="setTitle(old => 'Prefix' + old)">Prefix</button>
+  <button onclick="setTitle(old => old + 'Suffix')">Suffix</button>
+  <button onclick="setTitle(old => '[' + old + ']')">Wrap</button>
+  <button onclick="setTitle(old => old.replace(/^.* - /, 'New - '))">Replace before ' - '</button>
+</p>
+
+<h2>Set state</h2>
+<p>
+  <button onclick="setState('State A', '/sub/page?a=1#b=2')">A - /sub/page?a=1#b=2</button>
+  <button onclick="setState('State B2', '?a=2#b=3')">B2 - ?a=2#b=3</button>
+  <button onclick="setState('State B3', '?a=3#b=4')">B3 - ?a=3#b=4</button>
+  <button onclick="setState('State C', '#b=5')">C - #b=5</button>
+</p>
+
+<h2>Navigate</h2>
+<p>
+  <div><a href="/title-ro.html">/title-ro.html</a></div>
+  <div><a href="?a=1#h=2">?a=1#h=2</a></div>
+  <div><a href="#h=3">#h=3</a></div>
+  <div><a href="#h=4">#h=4</a></div>
+</p>
+
+<pre id="status"></pre>
+<pre id="titleLog"></pre>
