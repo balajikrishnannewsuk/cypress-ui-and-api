@@ -10,7 +10,7 @@ slack-fail-post-step: &slack-fail-post-step
         branch_pattern: .+
         event: fail
         template: basic_fail_1
-        channel: C02L84WH2TZ
+        channel: C039YF77KMY
 
 commands:
   install_nodejs:
