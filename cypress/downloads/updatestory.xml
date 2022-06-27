@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE doc SYSTEM "/SysConfig/Common/Rules/ni.dtd">
+<?EM-dtdExt /SysConfig/Common/Rules/ni.dtx?>
+<?EM-templateName /SysConfig/Common/Templates/General/Story.xml?>
+<?xml-stylesheet type="text/css" href="/SysConfig/Common/Rules/main.css"?>
+<doc version="4" xml:lang="en-uk"><story id="U16230756474ZuS"><prologue-syndication /><header id="R1x6ndJvnS5kP6hukmYL1mJ"><p class="p"><?EM-dummyText [Insert Header here]?>
+</p>
+</header>
+<grouphead id="RCyVtXxMtaR34vwuxXMgiRO"><web-headline><p class="p"><?EM-dummyText [Insert SEO headline here]?>
+</p>
+</web-headline><headline><p class="p">Test Latest Headline</p>
+</headline>
+<standfirst><p class="p">Test Latest Standfirst</p>
+</standfirst>
+</grouphead>
+<overrides-tablet id="RyG3OsMr1OOa8dwsR3yizDM"><section-headline><p class="p"><?EM-dummyText [Insert Override Headline here]?>
+</p>
+</section-headline><section-standfirst><p class="p"><?EM-dummyText [Insert Override Standfirst here]?>
+</p>
+</section-standfirst><section-byline><p class="p"><?EM-dummyText [Insert Override Byline here]?>
+</p>
+</section-byline><section-body><p class="p"><?EM-dummyText [Insert Override Copy here]?>
+</p>
+</section-body><standfirst-onecolumn><p class="p"><?EM-dummyText [Insert One Column Standfirst here]?>
+</p>
+</standfirst-onecolumn><navigation-headline><p class="p"><?EM-dummyText [Insert Floorline Headline here]?>
+</p>
+</navigation-headline><navigation-body><p class="p"><?EM-dummyText [Insert Floorline Copy here]?>
+</p>
+</navigation-body></overrides-tablet>
+<overrides-digital id="RSAiDakBN8oxBFmzqzZZkMJ"><strapline id="RYTmak0ETBhZww07b393bVM"><p class="p"><?EM-dummyText [Insert Strapline Here]?>
+</p>
+</strapline>
+</overrides-digital>
+<photo-web group="media" id="RQzHR63DdGm3Na2FVKg5ajN" picturedesklite="true" softcropsenabled="Digital_1500x1000 Digital_1600x900 Digital_1000x1000 Digital_1000x1500 Digital_1200x1500 Digital_1250x1000" xsm-preserve="true" emxed-trx-show-images-button="true"><fw-photo-main class="image_tt_1500x1000" description="main" id="Digital_1500x1000" softcrop="Digital_1500x1000" softcropenabled="enabled-preferred" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><fw-photo-main class="image_tt_1600x900" description="digital" id="Digital_1600x900" softcrop="Digital_1600x900" softcropenabled="enabled-standard" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><fw-photo-main class="image_tt_1000x1000" description="digital" id="Digital_1000x1000" softcrop="Digital_1000x1000" softcropenabled="enabled-standard" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><fw-photo-main class="image_tt_1000x1500" description="digital" id="Digital_1000x1500" softcrop="Digital_1000x1500" softcropenabled="enabled-standard" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><fw-photo-main class="image_tt_1200x1500" description="digital" id="Digital_1200x1500" softcrop="Digital_1200x1500" softcropenabled="enabled-standard" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><fw-photo-main class="image_tt_1250x1000" description="digital" id="Digital_1250x1000" softcrop="Digital_1250x1000" softcropenabled="enabled-standard" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><fw-photo class="image_tt_1000x1500" description="digital" id="Digital_1000x1500" softcrop="Digital_1000x1500" softcropenabled="enabled-standard" emxed-trx-uri-name="fileref" emxed-trx-component-type="image" /><photo-caption id="RdjVvBQ2ce4E7QKR4rHrI2I"><p emxed-trx-iscaption="true" emxed-trx-captiontitle="Caption" emxed-trx-captiontype="caption" emxed-trx-captiongroup="photo-caption" emxed-trx-captionsequence="0"><?EM-dummyText [Web Caption]?>
+<credit><?EM-dummyText [Credit]?>
+</credit></p>
+</photo-caption></photo-web>
+<byline id="RDOaEpa9UKBLvW7KDvIWvQM"><p class="p">Test Latest Byline</p>
+</byline>
+<text id="RPBIJcNlGP0A6gNnRC1B5SI"><p class="p">Test Latest Paragraph</p>
+</text>
+<related-links id="RE4xXhzk45nSA5bFe08P83H" xsm-preserve="" emxed-trx-component-type="collection-block-insert" style=""></related-links>
+</story>
+<seo id="RNGgwjgFyckgfkQosTSDozI"><web-description><p class="p"><?EM-dummyText [Insert SEO description here]?>
+</p>
+</web-description><author><p class="p"><?EM-dummyText [Insert SEO Author here]?>
+</p>
+</author>
+</seo><multimedia-container id="RRuAAttfpit4mgDGbOHcH7I"><?EM-dummyText [Insert Multimedia here]?>
+</multimedia-container>
+<digital-pictures id="R4HXo9mQ4mPxXInAJM78ArO"></digital-pictures>
+<override-pictures id="RTPlCsMk9E4ctbz98J8FDzN"></override-pictures>
+<pullquotes id="R6wV6YBb9Fk8OaxFSZBUWXK"></pullquotes><footer-syndication /></doc>

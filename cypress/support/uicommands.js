@@ -18,7 +18,6 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-import './index';
 import './windowcommands';
 import 'cypress-iframe';
 /// <reference types="cypress" />
@@ -57,15 +56,7 @@ const headlineArea="div[eom-name='headline']";
 
 // -- This is a command to login to swing application --
 Cypress.Commands.add("login", () => { 
-   cy.visit(Cypress.config('baseUrl'));
-   cy.window().then(win => {
-    cy.stub(win, 'open').callsFake((url, target) => {
-      expect(target).to.be.undefined
-      // call the original `win.open` method
-      // but pass the `_self` argument
-      return win.open.wrappedMethod.call(win, url, '_self')
-    }).as('open')
-  })
+   cy.forceVisit(Cypress.config('baseUrl'));
    cy.fixture("userData").then((testData) => {
    cy.wait(2000);
    cy.get(usernameTxtBox).first().type(testData.username);
@@ -86,14 +77,28 @@ Cypress.Commands.add("logout", () => {
 Cypress.Commands.add("createNewStory", () => { 
   cy.get(addIcon).click();
   cy.get(newStoryOption).click();
+  cy.wait(3000);
   cy.get(nameTxtBox).type(testname);
   cy.get(channelDropDown).click();
   cy.get(channelOption).contains('None').click();
   cy.get(topicFromChkBox).click();
   cy.get(createButton).click();
-  cy.wait(20000);
-  cy.debug();
-  cy.get("div[eom-name='headline']",{timeout: 50000}).should('be.visible');
+  cy.wait(15000);
+  // cy.url().then(url => {
+  //   const getUrl = url;
+  //   cy.log('Current URL is : '+getUrl)
+  //   cy.visit(getUrl, {
+  //     onBeforeLoad: (win) => {
+  //       // Let the child think it runs in the parent
+  //       win["self"] = win;
+  //     }
+  //   });
+  // });
+  cy.get('#editor_1_ifr')
+  .iframe()
+  .find("div[eom-name='headline']",{timeout: 50000}).should('be.visible');
+  // cy.frameLoaded("#editor_1_ifr")
+  // cy.get("div[eom-name='headline']",{timeout: 50000}).should('be.visible');
   // cy.url().then(url => {
   // const getUrl = url;
   // cy.log('Current URL is : '+getUrl)
@@ -150,9 +155,95 @@ Cypress.Commands.add("createNewStory", () => {
 
 
   Cypress.Commands.add('forceVisit', url => {
-    cy.window().then(win => {
-        return win.open(url, '_self');
+    cy.get('body').then(body$ => {
+      const appWindow = body$[0].ownerDocument.defaultView;
+      const appIframe = appWindow.parent.document.querySelector('iframe');
+  
+      // We return a promise here because we don't want to
+      // continue from this command until the new page is
+      // loaded.
+      return new Promise(resolve => {
+        appIframe.onload = () => resolve();
+        appWindow.location = url;
+      });
     });
-});
+  });
+
+  Cypress.Commands.add("iframe", { prevSubject: "element" }, $iframe => {
+    Cypress.log({
+      name: "iframe",
+      consoleProps() {
+        return {
+          iframe: $iframe,
+        };
+      },
+    });
+  
+    return new Cypress.Promise(resolve => {
+      onIframeReady(
+        $iframe,
+        () => {
+          resolve($iframe.contents().find("body"));
+        },
+        () => {
+          $iframe.on("load", () => {
+            resolve($iframe.contents().find("body"));
+          });
+        }
+      );
+    });
+  });
+  
+  function onIframeReady($iframe, successFn, errorFn) {
+    try {
+      const iCon = $iframe.first()[0].contentWindow,
+        bl = "about:blank",
+        compl = "complete";
+      const callCallback = () => {
+        try {
+          const $con = $iframe.contents();
+          if ($con.length === 0) {
+            // https://git.io/vV8yU
+            throw new Error("iframe inaccessible");
+          }
+          successFn($con);
+        } catch (e) {
+          // accessing contents failed
+          errorFn();
+        }
+      };
+  
+      const observeOnload = () => {
+        $iframe.on("load.jqueryMark", () => {
+          try {
+            const src = $iframe.attr("src").trim(),
+              href = iCon.location.href;
+            if (href !== bl || src === bl || src === "") {
+              $iframe.off("load.jqueryMark");
+              callCallback();
+            }
+          } catch (e) {
+            errorFn();
+          }
+        });
+      };
+      if (iCon.document.readyState === compl) {
+        const src = $iframe.attr("src").trim(),
+          href = iCon.location.href;
+        if (href === bl && src !== bl && src !== "") {
+          observeOnload();
+        } else {
+          callCallback();
+        }
+      } else {
+        observeOnload();
+      }
+    } catch (e) {
+      // accessing contentWindow failed
+      errorFn();
+    }
+  }
+
+  
 
 

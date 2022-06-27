@@ -13,7 +13,17 @@
 // the project's config changing)
 
 const cucumber = require('cypress-cucumber-preprocessor').default
+const path = require('path');
+// module.exports = (on, config) => {
+//   on('file:preprocessor', cucumber())
+// }
 
 module.exports = (on, config) => {
   on('file:preprocessor', cucumber())
-}
+  on("before:browser:launch", (browser = {}, args) => {
+    if (browser.name === "chrome") {
+      args.push("--disable-site-isolation-trials");
+      return args;
+    }
+  });
+};
