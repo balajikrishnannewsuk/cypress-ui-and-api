@@ -17,7 +17,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "download-extension": "ced gleekbfjekiniecknbkamfmkohkpodhe cypress/extensions/Ignore-X-Frame-headers_v1.1"
+    "download-extension": "ced gleekbfjekiniecknbkamfmkohkpodhe cypress/extensions/Ignore-X-Frame-headers_v1.1",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
